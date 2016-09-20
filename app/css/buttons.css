@@ -1,0 +1,14 @@
+.btn-custom {
+    background: #00aeef;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+}
+
+.btn-right {
+    float: right;
+}
+
+.btn-custom-form {
+    min-height: 100px !important;
+}

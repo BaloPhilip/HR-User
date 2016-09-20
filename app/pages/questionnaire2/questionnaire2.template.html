@@ -1,0 +1,86 @@
+<header class="header">
+</header>
+
+<div class="container app-page">
+
+    <div class="row">
+        <div class="col-lg-12  col-md-12  col-sm-12 col-xs-12 text-center">
+            <h1>Вопрос № {{$ctrl.question_number}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel panel-default ">
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-lg-11  col-md-11  col-sm-10 col-xs-12">
+                            <h4>
+                                {{$ctrl.result.question[0]}}
+                            </h4>
+                        </div>
+                        <div class="col-lg-1  col-md-1  col-sm-2 col-xs-12 question-select">
+                            <select class="form-control" id="select-0">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="panel panel-default ">
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-lg-11  col-md-11  col-sm-10 col-xs-12">
+                            <h4>
+                                {{$ctrl.result.question[1]}}
+                            </h4>
+                        </div>
+                        <div class="col-lg-1  col-md-1  col-sm-2 col-xs-12 question-select">
+                            <select class="form-control" id="select-1">
+                                <option>0</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <button
+                    ng-click="$ctrl.clickbutton()"
+                    type="button"
+                    class="btn-lg btn-custom pull-right">
+                Далее
+            </button>
+        </div>
+    </div>
+
+    <div class="row" id="error-type-1">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+            <h4>В сумме балы должны быть равны 5!</h4>
+        </div>
+    </div>
+</div>
+
+
+<footer class="footer">
+</footer>

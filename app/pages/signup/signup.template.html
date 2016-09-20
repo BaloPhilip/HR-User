@@ -1,0 +1,103 @@
+<header class="header">
+</header>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12 col-xs-12">
+
+            <form ng-submit="$ctrl.signup(signupform, $ctrl.user)" name="signupform" novalidate>
+                <div class="form-group"
+                     ng-class="{ 'has-error' : (signupform.lastName.$invalid && signupform.$submitted) }">
+                    <label>Фамилия</label>
+                    <input
+                            ng-model="$ctrl.user.lastName"
+                            name="lastName"
+                            type="text"
+                            class="form-control"
+                            placeholder="Фамилия"
+                            required/>
+                </div>
+                <div class="form-group"
+                     ng-class="{ 'has-error' : (signupform.name.$invalid && signupform.$submitted) }">
+                    <label>Имя</label>
+                    <input
+                            ng-model="$ctrl.user.firstName"
+                            name="name"
+                            type="text"
+                            class="form-control"
+                            placeholder="Имя"
+                            required/>
+                </div>
+                <div class="form-group"
+                     ng-class="{ 'has-error' : (signupform.middleName.$invalid && signupform.$submitted) }">
+                    <label>Отчество</label>
+                    <input
+                            ng-model="$ctrl.user.middleName"
+                            name="middleName"
+                            type="text"
+                            class="form-control"
+                            placeholder="Отчество"
+                            required/>
+                </div>
+                <div class="form-group"
+                     ng-class="{ 'has-error' : (signupform.email.$invalid && signupform.$submitted) }">
+                    <label>Email</label>
+                    <input
+                            ng-model="$ctrl.user.email"
+                            name="email"
+                            type="email"
+                            class="form-control"
+                            placeholder="email"
+                            required/>
+                </div>
+                <div class="form-group"
+                     ng-class="{ 'has-error' : (signupform.phone.$invalid && signupform.$submitted) }">
+                    <label>Телефон</label>
+                    <input
+                            ng-model="$ctrl.user.phone"
+                            ui-mask="(999) 999-99-99"
+                            ui-mask-placeholder
+                            placeholder="Телефон"
+                            name="phone"
+                            type="text"
+                            class="form-control"
+                            required/>
+                </div>
+                <div class="form-group"
+                     ng-class="{ 'has-error' : (signupform.position.$invalid && signupform.$submitted) }">
+                    <label>Вакансия</label>
+                    <select
+                            ng-model="$ctrl.user.position"
+                            name="position"
+                            class="form-control"
+                            required>
+                        <option>javascript</option>
+                        <option>pyton</option>
+                        <option>php</option>
+                        <option>android</option>
+                        <option>ios</option>
+                    </select>
+                </div>
+                <div class="form-group"
+                     ng-class="{ 'has-error' : (signupform.experience.$invalid && signupform.$submitted) }">
+                    <label>Опыт работы</label>
+                    <select
+                            ng-model="$ctrl.user.experience"
+                            name="experience"
+                            class="form-control"
+                            required>
+                        <option> <1</option>
+                        <option>1-3</option>
+                        <option> >3</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-lg btn-custom btn-right">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<footer class="footer">
+</footer>
