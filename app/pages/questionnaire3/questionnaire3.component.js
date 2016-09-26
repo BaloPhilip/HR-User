@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('questionnaire3')
+angular
+    .module('questionnaire3')
     .component('questionnaire3', {
         templateUrl: 'pages/questionnaire3/questionnaire3.template.html',
         controller: ['Questionnaire3Service', '$routeParams', '$location',
@@ -37,7 +38,7 @@ angular.module('questionnaire3')
                     var answer = [];
 
                     for (var i = 0; i <= select.length - 1; i++) {
-                        answer.push( +(select[i].value) )
+                        answer.push(+(select[i].value))
                     }
 
                     return answer;

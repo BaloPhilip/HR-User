@@ -19,11 +19,11 @@
                             required/>
                 </div>
                 <div class="form-group"
-                     ng-class="{ 'has-error' : (signupform.name.$invalid && signupform.$submitted) }">
+                     ng-class="{ 'has-error' : (signupform.firstName.$invalid && signupform.$submitted) }">
                     <label>Имя</label>
                     <input
                             ng-model="$ctrl.user.firstName"
-                            name="name"
+                            name="firstName"
                             type="text"
                             class="form-control"
                             placeholder="Имя"
