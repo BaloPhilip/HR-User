@@ -1,70 +1,84 @@
 'use strict';
 
+function questionnaire2Ctrl(Questionnaire2Service, $routeParams, $location) {
+
+    var vm = this,
+        answer;
+
+    vm.question_number = $routeParams.question_number;
+
+    //получаем вопросы из БД
+
+    Questionnaire2Service.get({question_number: vm.question_number}).$promise.then(function (result) {
+
+        vm.result = result;
+
+    });
+
+    // передаем ответ в БД и переходим на следующий вопрос
+
+    vm.clickButton = function () {
+
+        var question_value_1 = +(document.getElementById('select-0').value),
+            question_value_2 = +(document.getElementById('select-1').value);
+
+        answer = [question_value_1, question_value_2];
+
+        // если с БД пришел next_question = true и сумма баллов во всех блоках равна 5
+        // переходим на следующий вопрос, если next_question = false вопросы в тесте закончились
+        // переходим на следующий тест
+
+        if (((question_value_1 + question_value_2) === 5) && (vm.result.next_question)) {
+
+            $location.path(`/questionnaire2/${+(vm.question_number) + 1}`);
+
+            // сохраняем ответ в БД
+
+            Questionnaire2Service.save({
+
+                answer,
+                question_number: vm.question_number
+
+            }).$promise.then(function () {
+
+            }, function (error) {
+                vm.error = error;
+            });
+
+        // если сумма баллов во всех блоках не равна 5, отображаем ошибку
+
+        } else if (((question_value_1 + question_value_2) !== 5)) {
+
+            document.getElementById('error-type-1').style.display = 'block';
+
+        } else {
+
+            // сохраняем ответ в БД
+
+            Questionnaire2Service.save({
+
+                answer,
+                question_number: vm.question_number
+
+            }).$promise.then(function () {
+
+            }, function (error) {
+                vm.error = error;
+            });
+
+            // переход на описание следующего теста
+
+            $location.path(`/questionnaire3description`);
+
+        }
+
+    };
+
+}
+
 angular
     .module('questionnaire2')
     .component('questionnaire2', {
         templateUrl: 'pages/questionnaire2/questionnaire2.template.html',
-
-        controller: ['Questionnaire2Service', '$routeParams', '$location',
-            function HrQuestionnaire2(Questionnaire2Service, $routeParams, $location) {
-
-                var _this = this,
-                    answer;
-
-                _this.question_number = $routeParams.question_number;
-
-                Questionnaire2Service.get({question_number: $routeParams.question_number}).$promise.then(function (result) {
-
-                    _this.result = result;
-
-                });
-
-                _this.clickbutton = function () {
-
-                    var question_value_1 = +(document.getElementById('select-0').value),
-                        question_value_2 = +(document.getElementById('select-1').value);
-
-                    answer = [question_value_1, question_value_2];
-
-                    if (((question_value_1 + question_value_2) === 5) && (_this.result.next_question)) {
-
-                        $location.path(`/questionnaire2/${+(_this.question_number) + 1}`);
-
-                        Questionnaire2Service.save({
-
-                            answer,
-                            question_number: $routeParams.question_number
-
-                        }).$promise.then(function () {
-
-                        }, function (error) {
-                            _this.error = error;
-                            // console.log('error', _this.error);
-                        });
-
-
-                    } else if (((question_value_1 + question_value_2) !== 5)) {
-
-                        document.getElementById('error-type-1').style.display = 'block';
-
-                    } else {
-
-                        Questionnaire2Service.save({
-
-                            answer,
-                            question_number: $routeParams.question_number
-
-                        }).$promise.then(function () {
-
-                        }, function (error) {
-                            _this.error = error;
-                        });
-
-                        $location.path(`/questionnaire3description`);
-
-                    }
-
-                };
-
-            }]
+        controller: ('Questionnaire2Ctrl', ['Questionnaire2Service', '$routeParams', '$location', questionnaire2Ctrl])
     });

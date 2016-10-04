@@ -1,98 +1,95 @@
 'use strict';
 
+function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
+
+    var vm = this,
+        answer,
+        select = document.querySelectorAll('select');
+
+    vm.question_number = $routeParams.question_number;
+
+    //получаем вопросы из БД
+
+    Questionnaire3Service.resource.get({question_number: vm.question_number}).$promise.then(function (result) {
+        vm.result = result;
+    });
+
+    // передаем ответ в БД и переходим на следующий вопрос
+
+    vm.clickButton = function () {
+
+        // Проверка на правильность заполнения блока утверждений:
+        // 1) Сумма баллов всех блоков должна быть равна 10
+        // 2) Количество утверждений на которе можно дать оценку в блоке не должно превышать 4
+
+        vm.validation = Questionnaire3Service.validation(select);
+
+        // Запись ответов с одного блока в массив
+
+        answer = Questionnaire3Service.answer_questionnaire(select);
+
+        // если с БД пришел next_question = true, сумма баллов во всех утверждениях равна 10 и
+        // полученно оценок на 4 утверждени переходим на следующий вопрос,
+        // если next_question = false вопросы в тесте закончились
+        // переходим на следующий тест
+
+        if (vm.result.next_question && vm.validation.sum === 10 && vm.validation.answer_block <= 4) {
+
+            $location.path(`/questionnaire3/${+(vm.question_number) + 1}`);
+
+            // сохраняем ответ в БД
+
+            Questionnaire3Service.resource.save({
+
+                answer,
+                question_number: vm.question_number
+
+            }).$promise.then(function () {
+
+            }, function (error) {
+                vm.error = error;
+            });
+
+            // Показуем ошибку если оценка данна больше чем на 4 утверджения
+
+        } else if (vm.validation.answer_block > 4) {
+
+            document.getElementById('error-type-1').style.display = 'none';
+            document.getElementById('error-type-2').style.display = 'block';
+
+            // Показуем ошибку если сумма баллов не равна 10
+
+        } else if (vm.validation.sum !== 10) {
+
+            document.getElementById('error-type-1').style.display = 'block';
+            document.getElementById('error-type-2').style.display = 'none';
+
+        } else {
+
+            // сохраняем ответ в БД
+
+            Questionnaire3Service.resource.save({
+
+                answer,
+                question_number: vm.question_number
+
+            }).$promise.then(function () {
+
+            }, function (error) {
+                vm.error = error;
+            });
+
+            // переход на описание следующего теста
+
+            $location.path(`/questionnaireend`);
+        }
+    }
+}
+
 angular
     .module('questionnaire3')
     .component('questionnaire3', {
         templateUrl: 'pages/questionnaire3/questionnaire3.template.html',
-        controller: ['Questionnaire3Service', '$routeParams', '$location',
-            function HrQuestionnaire3(Questionnaire3Service, $routeParams, $location) {
+        controller: ('Questionnaire2Ctrl', ['Questionnaire3Service', '$routeParams', '$location', questionnaire2Ctrl])
 
-                var _this = this,
-                    select = document.querySelectorAll('select');
-
-                _this.question_number = $routeParams.question_number;
-
-                Questionnaire3Service.get({question_number: $routeParams.question_number}).$promise.then(function (result) {
-                    _this.result = result;
-                });
-
-                var validation = function () {
-                    var sum = null,
-                        answer_block = 0;
-
-                    for (var i = 0; i <= select.length - 1; i++) {
-                        var item = +(select[i].value);
-                        sum = sum + item;
-
-                        if (item !== 0) {
-                            answer_block += 1;
-                        }
-                    }
-                    return {
-                        sum,
-                        answer_block
-                    }
-                };
-
-                var answer_questionnaire = function () {
-                    var answer = [];
-
-                    for (var i = 0; i <= select.length - 1; i++) {
-                        answer.push(+(select[i].value))
-                    }
-
-                    return answer;
-
-                };
-
-                _this.clickbutton = function () {
-
-                    _this.validation = validation();
-                    var answer = answer_questionnaire();
-
-
-                    if (_this.result.next_question && _this.validation.sum === 10 && _this.validation.answer_block <= 4) {
-
-                        $location.path(`/questionnaire3/${+(_this.question_number) + 1}`);
-
-                        Questionnaire3Service.save({
-
-                            answer,
-                            question_number: $routeParams.question_number
-
-                        }).$promise.then(function () {
-
-                        }, function (error) {
-                            _this.error = error;
-                        });
-
-                    } else if (_this.validation.answer_block > 4) {
-
-                        document.getElementById('error-type-1').style.display = 'none';
-                        document.getElementById('error-type-2').style.display = 'block';
-
-                    } else if (_this.validation.sum !== 10) {
-
-                        document.getElementById('error-type-1').style.display = 'block';
-                        document.getElementById('error-type-2').style.display = 'none';
-
-                    } else {
-
-                        Questionnaire3Service.save({
-
-                            answer,
-                            question_number: $routeParams.question_number
-
-                        }).$promise.then(function () {
-
-                        }, function (error) {
-                            _this.error = error;
-                        });
-
-                        $location.path(`/questionnaireend`);
-
-                    }
-
-                }
-            }]
     });
