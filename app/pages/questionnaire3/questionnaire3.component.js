@@ -1,11 +1,12 @@
 'use strict';
 
-function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
+function questionnaire2Ctrl(Questionnaire3Service, $scope, $routeParams, $location) {
+
 
     var vm = this,
-        answer,
-        select = document.querySelectorAll('select');
+        answer;
 
+    vm.valuesOption = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     vm.question_number = $routeParams.question_number;
 
     //получаем вопросы из БД
@@ -16,17 +17,37 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
 
     // передаем ответ в БД и переходим на следующий вопрос
 
+
     vm.clickButton = function () {
+
+        // numberAnswer, numberAnswerEmpty, blockAnswer используются для отображения ошибок
+
+        vm.numberAnswer = false;
+        vm.numberAnswerEmpty = false;
+        vm.blockAnswer = false;
+
+        // Получаем ответы пользователя на утверждения из блока
+
+        var allValues = [
+            $scope.val1,
+            $scope.val2,
+            $scope.val3,
+            $scope.val4,
+            $scope.val5,
+            $scope.val6,
+            $scope.val7,
+            $scope.val8
+        ];
 
         // Проверка на правильность заполнения блока утверждений:
         // 1) Сумма баллов всех блоков должна быть равна 10
         // 2) Количество утверждений на которе можно дать оценку в блоке не должно превышать 4
 
-        vm.validation = Questionnaire3Service.validation(select);
+        vm.validation = Questionnaire3Service.validation(allValues);
+        
+        // Запись ответов с одного блока
 
-        // Запись ответов с одного блока в массив
-
-        answer = Questionnaire3Service.answer_questionnaire(select);
+        answer = Questionnaire3Service.answer_questionnaire(allValues);
 
         // если с БД пришел next_question = true, сумма баллов во всех утверждениях равна 10 и
         // полученно оценок на 4 утверждени переходим на следующий вопрос,
@@ -54,15 +75,19 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
 
         } else if (vm.validation.answer_block > 4) {
 
-            document.getElementById('error-type-1').style.display = 'none';
-            document.getElementById('error-type-2').style.display = 'block';
+            vm.blockAnswer = true;
 
             // Показуем ошибку если сумма баллов не равна 10
 
-        } else if (vm.validation.sum !== 10) {
+        } else if (vm.validation.sum !== 10 && vm.validation.sum !== null) {
 
-            document.getElementById('error-type-1').style.display = 'block';
-            document.getElementById('error-type-2').style.display = 'none';
+            vm.numberAnswer = true;
+
+            // Показуем ошибку если не дан не один ответ
+
+        } else if (vm.validation.sum === null) {
+
+            vm.numberAnswerEmpty = true;
 
         } else {
 
@@ -83,6 +108,7 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
 
             $location.path(`/questionnaireend`);
         }
+
     }
 }
 
@@ -90,6 +116,7 @@ angular
     .module('questionnaire3')
     .component('questionnaire3', {
         templateUrl: 'pages/questionnaire3/questionnaire3.template.html',
-        controller: ('Questionnaire2Ctrl', ['Questionnaire3Service', '$routeParams', '$location', questionnaire2Ctrl])
+        controller: ('Questionnaire2Ctrl',
+            ['Questionnaire3Service', '$scope', '$routeParams', '$location', questionnaire2Ctrl])
 
     });

@@ -14,18 +14,25 @@ function questionnaire3Service($resource, API_CONFIG) {
 
     // Проверка формы заполнения блока
 
-    function validation(select) {
+    function validation(value) {
+
         var sum = null,
             answer_block = 0;
 
-        for (var i = 0; i <= select.length - 1; i++) {
-            var item = +(select[i].value);
-            sum = sum + item;
+        for (var i = 0; i <= value.length - 1; i++) {
 
-            if (item !== 0) {
-                answer_block += 1;
+            var item = value[i];
+
+            if (item !== undefined) {
+
+                sum = sum + item;
+
+                if (item !== 0) {
+                    answer_block += 1;
+                }
             }
         }
+
         return {
             sum,
             answer_block
@@ -34,17 +41,29 @@ function questionnaire3Service($resource, API_CONFIG) {
 
     // Запись ответов с одного блока в массив
 
-    function answer_questionnaire(select) {
+    function answer_questionnaire(value) {
+
         var answer = [];
 
-        for (var i = 0; i <= select.length - 1; i++) {
-            answer.push(+(select[i].value))
+        for (var i = 0; i <= value.length - 1; i++) {
+
+            var item = value[i];
+
+            //Проверка ответа на undefined, если undefined записываем в ответ 0.
+
+            if (item === undefined) {
+
+                answer.push(0)
+
+            } else {
+
+                answer.push(item)
+
+            }
         }
 
         return answer;
-
     }
-
 }
 
 angular

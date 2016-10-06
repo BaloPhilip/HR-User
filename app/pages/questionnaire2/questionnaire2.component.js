@@ -6,6 +6,8 @@ function questionnaire2Ctrl(Questionnaire2Service, $routeParams, $location) {
         answer;
 
     vm.question_number = $routeParams.question_number;
+    vm.showError = false;
+
 
     //получаем вопросы из БД
 
@@ -49,7 +51,9 @@ function questionnaire2Ctrl(Questionnaire2Service, $routeParams, $location) {
 
         } else if (((question_value_1 + question_value_2) !== 5)) {
 
-            document.getElementById('error-type-1').style.display = 'block';
+            vm.showError = true;
+
+            // document.getElementById('error-type').style.display = 'block';
 
         } else {
 
