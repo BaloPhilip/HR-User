@@ -7,4 +7,4 @@ $ bower install <br>
 
 
 <h4>Запуск http-server http://localhost:8000/</h4>
-$ npm start<br>
+$ gulp serv<br>

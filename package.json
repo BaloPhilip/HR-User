@@ -6,6 +6,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-server-livereload": "^1.8.4",
     "http-server": "^0.9.0"
   },
   "scripts": {
@@ -13,4 +15,3 @@
     "start": "http-server ./app -a localhost -p 8000 -c-1"
   }
 }
-

@@ -52,13 +52,9 @@ function questionnaire3Service($resource, API_CONFIG) {
             //Проверка ответа на undefined, если undefined записываем в ответ 0.
 
             if (item === undefined) {
-
                 answer.push(0)
-
             } else {
-
                 answer.push(item)
-
             }
         }
 
