@@ -39,7 +39,7 @@ function questionnaire3Service($resource, API_CONFIG) {
         }
     }
 
-    // Запись ответов с одного блока в массив
+    // Запись ответов с блока в массив
 
     function answer_questionnaire(value) {
 

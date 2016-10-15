@@ -1,12 +1,12 @@
 'use strict';
 
-function questionnaire2Ctrl(Questionnaire3Service, $scope, $routeParams, $location) {
+function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
 
 
     var vm = this,
         answer;
 
-    vm.valuesOption = [0, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    vm.valuesOption = [2, 3, 4, 5, 6, 7, 8, 9, 10];
     vm.question_number = $routeParams.question_number;
 
     //получаем вопросы из БД
@@ -29,14 +29,14 @@ function questionnaire2Ctrl(Questionnaire3Service, $scope, $routeParams, $locati
         // Получаем ответы пользователя на утверждения из блока
 
         var allValues = [
-            $scope.val1,
-            $scope.val2,
-            $scope.val3,
-            $scope.val4,
-            $scope.val5,
-            $scope.val6,
-            $scope.val7,
-            $scope.val8
+            vm.val1,
+            vm.val2,
+            vm.val3,
+            vm.val4,
+            vm.val5,
+            vm.val6,
+            vm.val7,
+            vm.val8
         ];
 
         // Проверка на правильность заполнения блока утверждений:
@@ -45,7 +45,7 @@ function questionnaire2Ctrl(Questionnaire3Service, $scope, $routeParams, $locati
 
         vm.validation = Questionnaire3Service.validation(allValues);
         
-        // Запись ответов с одного блока
+        // Запись ответов с блока
 
         answer = Questionnaire3Service.answer_questionnaire(allValues);
 
@@ -117,6 +117,6 @@ angular
     .component('questionnaire3', {
         templateUrl: 'pages/questionnaire3/questionnaire3.template.html',
         controller: ('Questionnaire2Ctrl',
-            ['Questionnaire3Service', '$scope', '$routeParams', '$location', questionnaire2Ctrl])
+            ['Questionnaire3Service', '$routeParams', '$location', questionnaire2Ctrl])
 
     });
