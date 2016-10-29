@@ -2,7 +2,6 @@
 
 function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
 
-
     var vm = this,
         answer;
 
@@ -10,24 +9,19 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
     vm.question_number = $routeParams.question_number;
 
     //получаем вопросы из БД
-
     Questionnaire3Service.resource.get({question_number: vm.question_number}).$promise.then(function (result) {
         vm.result = result;
     });
 
     // передаем ответ в БД и переходим на следующий вопрос
-
-
     vm.clickButton = function () {
 
         // numberAnswer, numberAnswerEmpty, blockAnswer используются для отображения ошибок
-
         vm.numberAnswer = false;
         vm.numberAnswerEmpty = false;
         vm.blockAnswer = false;
 
         // Получаем ответы пользователя на утверждения из блока
-
         var allValues = [
             vm.val1,
             vm.val2,
@@ -42,11 +36,9 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
         // Проверка на правильность заполнения блока утверждений:
         // 1) Сумма баллов всех блоков должна быть равна 10
         // 2) Количество утверждений на которе можно дать оценку в блоке не должно превышать 4
-
         vm.validation = Questionnaire3Service.validation(allValues);
-        
-        // Запись ответов с блока
 
+        // Запись ответов с блока
         answer = Questionnaire3Service.answer_questionnaire(allValues);
 
         // если с БД пришел next_question = true, сумма баллов во всех утверждениях равна 10 и
@@ -59,7 +51,6 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
             $location.path(`/questionnaire3/${+(vm.question_number) + 1}`);
 
             // сохраняем ответ в БД
-
             Questionnaire3Service.resource.save({
 
                 answer,
@@ -71,20 +62,17 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
                 vm.error = error;
             });
 
-            // Показуем ошибку если оценка данна больше чем на 4 утверджения
-
+        // Показываем ошибку если оценка дана больше чем на 4 утверджения
         } else if (vm.validation.answer_block > 4) {
 
             vm.blockAnswer = true;
 
-            // Показуем ошибку если сумма баллов не равна 10
-
+        // Показываем ошибку если сумма баллов не равна 10
         } else if (vm.validation.sum !== 10 && vm.validation.sum !== null) {
 
             vm.numberAnswer = true;
 
-            // Показуем ошибку если не дан не один ответ
-
+        // Показываем ошибку если не дан не один ответ
         } else if (vm.validation.sum === null) {
 
             vm.numberAnswerEmpty = true;
@@ -92,7 +80,6 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
         } else {
 
             // сохраняем ответ в БД
-
             Questionnaire3Service.resource.save({
 
                 answer,
@@ -105,7 +92,6 @@ function questionnaire2Ctrl(Questionnaire3Service, $routeParams, $location) {
             });
 
             // переход на описание следующего теста
-
             $location.path(`/questionnaireend`);
         }
 

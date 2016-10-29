@@ -13,7 +13,6 @@ function questionnaire3Service($resource, API_CONFIG) {
     };
 
     // Проверка формы заполнения блока
-
     function validation(value) {
 
         var sum = null,
@@ -27,7 +26,7 @@ function questionnaire3Service($resource, API_CONFIG) {
 
                 sum = sum + item;
 
-                if (item !== 0) {
+                if (item !== 0 && item !== null) {
                     answer_block += 1;
                 }
             }
@@ -40,7 +39,6 @@ function questionnaire3Service($resource, API_CONFIG) {
     }
 
     // Запись ответов с блока в массив
-
     function answer_questionnaire(value) {
 
         var answer = [];
@@ -50,8 +48,7 @@ function questionnaire3Service($resource, API_CONFIG) {
             var item = value[i];
 
             //Проверка ответа на undefined, если undefined записываем в ответ 0.
-
-            if (item === undefined) {
+            if (item === undefined || item === null) {
                 answer.push(0)
             } else {
                 answer.push(item)
